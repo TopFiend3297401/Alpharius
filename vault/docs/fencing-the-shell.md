@@ -9,7 +9,7 @@ OpenCode permission configuration for running small models safely. Syntax verifi
 
 - Actions: `"allow"`, `"ask"`, `"deny"`.
 - Bash rules are pattern-matched and the **last matching rule wins** — so the `"*"` wildcard goes first, specific rules after it.
-- `read`, `edit` and `webfetch` accept the same treatment, with path patterns for read/edit.
+- `read` and `edit` accept the same treatment with path patterns; newer versions add `webfetch` (see the caveat below).
 
 ## A sane fence for a local small model
 
@@ -24,13 +24,12 @@ OpenCode permission configuration for running small models safely. Syntax verifi
       "rsync *": "deny",
       "find / *": "ask",
       "find /home*": "ask"
-    },
-    "webfetch": {
-      "*": "ask"
     }
   }
 }
 ```
+
+Version caveat, learned the hard way: OpenCode validates the whole config against its schema and refuses to start on any unknown key — a `webfetch` permission block, present in current docs, is rejected by 1.18.19. If a session dies with ConfigInvalidError, bisect the config keys with `opencode models` in a scratch directory.
 
 - Network escape (ssh/scp/rsync) is denied outright: a local agent has no business leaving the machine.
 - Filesystem-wide sweeps are `ask`, not `deny` — they are occasionally legitimate, and the prompt interrupt itself tells you the model has lost its anchor (see [[grounding-with-agents-md]]).

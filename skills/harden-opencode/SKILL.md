@@ -40,11 +40,14 @@ wins, so the wildcard goes first:
       "rsync *": "deny",
       "find / *": "ask",
       "find /home*": "ask"
-    },
-    "webfetch": { "*": "ask" }
+    }
   }
 }
 ```
+
+Caution: OpenCode refuses to start on any config key its installed version does not know
+(e.g. a `webfetch` permission block fails on 1.18.19). If the session dies with
+ConfigInvalidError, bisect the config keys with `opencode models` in a scratch directory.
 
 - Deny network escape outright: a local agent has no business leaving the machine.
 - Filesystem-wide sweeps are "ask", not "deny" — the interrupt itself signals the model has lost
