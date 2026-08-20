@@ -1,0 +1,17 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "permission": {
+    "bash": {
+      "*": "allow",
+      "ssh *": "deny",
+      "scp *": "deny",
+      "rsync *": "deny",
+      "find / *": "ask",
+      "find /home*": "ask"
+    },
+    "webfetch": {
+      "*": "ask"
+    }
+  }
+}
