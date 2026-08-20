@@ -1,4 +1,6 @@
-Design note for the exoskeleton MCP server: tools that compensate for small-model tool-mechanics failures. The design spec is [[failure-taxonomy]] — one countermeasure per category. Status: design only, nothing built. See [[roadmap]] P2.
+Design note for the exoskeleton MCP server: tools that compensate for small-model tool-mechanics failures. The design spec is [[failure-taxonomy]] — one countermeasure per category.
+
+**STATUS 2026-08-20: v0.1.0 built and tested** (28 tests incl. a stdio protocol round-trip) at `projects/exoskeleton-mcp/exoskeleton.py`, test-first, zero dependencies. Decisions taken: Python 3 stdlib with the stdio JSON-RPC implemented directly (no SDK); legacy initialize-handshake MCP era for maximum client compatibility (modern 2026-07-28 `_meta` era is a follow-up); tools sit *beside* the harness builtins. Still open: whether small models reliably pick the exoskeleton tools over builtins — that is [[roadmap]] P4's measurement, not an assumption.
 
 ## Principles
 
