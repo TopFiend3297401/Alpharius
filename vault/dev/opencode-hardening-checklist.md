@@ -11,6 +11,8 @@ Observed state (from the OpenCode log, 2026-08-20): bash permission was wildcard
 ## Alpharius repo
 
 - [x] `AGENTS.md` and `opencode.json` shipped with the scaffold, 2026-08-20.
+- [x] Wander probe re-run 2026-08-21 in a third repo (`Wayland-Desktop-Utility`) with the same scaffold: no wander, no ssh, no out-of-repo access. [[case-study-the-launcher-build]].
+- [ ] No mandated command catches source files outside the build graph — `cargo check --all-targets`, clippy and test all operate on targets, and an unreferenced `.rs` is not one. Needs a tool, not a checklist line.
 
 ## Global
 
