@@ -2,6 +2,18 @@ Design note for the exoskeleton MCP server: tools that compensate for small-mode
 
 **STATUS 2026-08-20: v0.1.0 built and tested** (28 tests incl. a stdio protocol round-trip) at `projects/exoskeleton-mcp/exoskeleton.py`, test-first, zero dependencies. Decisions taken: Python 3 stdlib with the stdio JSON-RPC implemented directly (no SDK); legacy initialize-handshake MCP era for maximum client compatibility (modern 2026-07-28 `_meta` era is a follow-up); tools sit *beside* the harness builtins. Still open: whether small models reliably pick the exoskeleton tools over builtins — that is [[roadmap]] P4's measurement, not an assumption.
 
+**⚠️ SCOPE CORRECTION 2026-08-23** — two of the four behaviours below already ship in OpenCode
+1.18.19 and are on by default: the **repo jail** is `permission.external_directory` and **repeat
+detection** is `permission.doom_loop`. Measured, not read: [[opencode-tool-surface]]. They were
+active during [[case-study-the-vault-hunt]] and did not stop it, because `external_directory`
+governs the path-taking tools and **not `bash`** — the hunt was a `find` in the shell. So the
+built-in jail does not make [[fencing-the-shell]] redundant; the two cover different halves.
+
+What is left genuinely unbuilt is the **anchored fuzzy edit** and the **path resolver**. Build
+those; drop the other two. This also makes [[roadmap]] P4 honest: "stock tools" already means
+"tools with a jail and a loop-breaker", and the earlier framing would have credited this server
+with two wins the harness was already delivering.
+
 ## Principles
 
 - Tiny tool surface, dead-simple schemas: few tools, mostly single string arguments, forgiving parsing. Every extra tool and every extra argument is a hallucination surface.

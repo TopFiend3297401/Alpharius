@@ -13,12 +13,14 @@ A note is promoted from dev to docs when its claims have been verified and its c
 - [[lsp-external-verification]] — diagnostics in the loop as a substitute for internal coherence
 - [[case-study-the-vault-hunt]] — a live wander incident, 2026-08-20, and what it teaches
 - [[skills-distribution]] — the skill format, where harnesses load them from, and skills.sh
+- [[opencode-tool-surface]] — measured 2026-08-23: what tools a model is actually offered, the two guardrails that already ship, and the command-template trap
 
 ## Development brain
 
 - [[roadmap]] — the projects, their status, and what happens next
 - [[exoskeleton-mcp-design]] — design for the tool-mechanics compensation MCP server
 - [[opencode-hardening-checklist]] — concrete actions for our own machines
+- [[case-study-the-launcher-build]] — second Bonsai run, 2026-08-21: the fence held, two new failure modes
 
 ## Elsewhere in the repo
 
