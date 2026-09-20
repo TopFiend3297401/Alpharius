@@ -97,8 +97,17 @@ model that learns to dismiss LSP output will dismiss the real error too.
 
 ## Step 3 — `BRIEF.md` · FIXED SKELETON, dynamic content
 
-Paste this to the model **verbatim** when the session starts. Keeping it in a file is what makes
-runs comparable.
+⛔ **`BRIEF.md` must be a FILE in the repository, not only a pasted message — and the model must be
+told to re-read it before claiming done.**
+
+A long session will compact. When it does, a *pasted* brief becomes a summary, and the first thing
+lost is the numbered acceptance criteria — leaving the model with a vague sense of "finished"
+instead of a contract. **Measured 2026-09-20:** a run compacted, then stopped four steps short of
+its own "Done means" list and *asked permission* to do step 1, which the brief had already
+required. Everything it had verified was real; it verified against the remembered gist.
+
+**A file survives compaction. A message does not.** Paste it verbatim at the start *and* keep it on
+disk.
 
 ```markdown
 # The brief
@@ -145,6 +154,9 @@ views, typography.> This is a showcase piece, not a form.
 healthy" while **26 of 30** endpoint pairs returned HTTP 500, because it checked `/health` instead
 of the feature. Do not repeat that.
 
+⛔ **Before you say you are done, re-read `BRIEF.md` and confirm every numbered step above.** Do not
+ask permission for anything this brief already requires — it is already authorised.
+
 State plainly what you verified and how. If something does not work, say so rather than rounding up.
 ```
 
@@ -168,6 +180,11 @@ It should check, at minimum:
    the status code
 4. **The client half builds** — and that its dependencies were actually installed
 5. Exit non-zero on any failure
+
+⛔ **The oracle must clean up after itself.** Anything it starts, it kills — and it should verify the
+kill, not assume it. **Measured 2026-09-20:** an oracle's PID capture happened inside a subshell, so
+its server outlived the run by half an hour. A later session found that stranger's process, assumed
+it was its own, and reported on it. **A leftover process is a false witness for every run after it.**
 
 ⚠️ **A false failure is worse than a missed one.** Before reporting a failure, check your own
 invocation against what the project documents. In one run an oracle reported "the backend does not
@@ -224,6 +241,10 @@ claim about its own speed.
 - ⛔ **Provenance can lie.** A model given a `source` field will happily tag an invented value as
   sourced. State the rule explicitly: no source, mark it estimated.
 - ⚠️ **Noisy LSP trains the model to ignore LSP.** Fix the language-server config before the run.
+- ⛔ **Compaction eats acceptance criteria.** Keep the brief on disk and make re-reading it the last
+  step before "done". A model that compacted will otherwise finish against a summary of its contract.
+- ⛔ **A model will ask permission for work it was already given.** State explicitly that the brief
+  is authorisation. Otherwise a compacted session stalls politely at step 1.
 - ⚠️ **Sibling directories are magnets.** If earlier attempts at the same task sit next door, the
   model will read them unless told not to — measured, and caught by the native repo jail.
 
