@@ -6,6 +6,11 @@ license: MIT
 
 # Harden an OpenCode project for a small model
 
+> ⚠️ **See `opencode-init` first.** It supersedes this skill for new work, adding the three things
+> measured to matter most on 2026-09-20: the oracle must live **outside** the repository, ambition
+> must be stated in prose, and "done" must mean a real end-to-end test rather than a health check.
+> This skill remains correct for Steps 1–2 (grounding and fencing) and for the wander probe.
+
 Small models fail at tool mechanics and referent resolution more than at reasoning. Grounding
 reduces the wish to wander; the fence removes the ability; LSP makes the model's own breakage
 visible to it. Apply all three, then verify.

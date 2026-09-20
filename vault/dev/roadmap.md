@@ -7,6 +7,15 @@ Projects, status, and next actions. Working note — expect churn. Dates absolut
 - Battle-tested 2026-08-21 on a cold-start Rust build: [[case-study-the-launcher-build]]. The fence held completely — no wander, no out-of-repo access, against the same model that produced [[case-study-the-vault-hunt]]. Grounding and fencing are earning their keep.
 - Next: fold back what that run exposed (build-graph reachability, confabulated blockers); consider a third skill for the exoskeleton once P2 exists.
 
+- **Third skill shipped 2026-09-20: `opencode-init`.** The full pre-flight, derived from three
+  measured runs of one task on one local model. Doctrine behind it: [[the-oracle-must-be-hidden]].
+  ⚠️ **`harden-opencode` is now the ancestor** and points at it; the two should be reconciled rather
+  than left to drift.
+- ⚠️ **P2b (`instructions` + `/ground`) is STILL not in this repo** and is now the measured
+  highest-value layer — it is what made a model route to a knowledge base unprompted instead of
+  inventing facts. Shipping it is the single biggest gap between what runs on Origin and what this
+  repo gives anyone else.
+
 ## P2 — exoskeleton MCP server (v0.1.0 built 2026-08-20)
 
 - Design: [[exoskeleton-mcp-design]]. Implementation: `projects/exoskeleton-mcp/exoskeleton.py` — zero-dependency Python, 28 tests, TDD. Tools: find_file, read_file, edit_file; behaviours: repo jail, repeat detection, state echo.

@@ -18,3 +18,16 @@ Observed state (from the OpenCode log, 2026-08-20): bash permission was wildcard
 
 - [ ] Decide whether the fence belongs in the global OpenCode config as a default-deny for ssh/scp/rsync on every project, with repos opting *up*, not down.
 - [ ] Check whether the LM Studio provider setup pins sampling parameters per model — the Coppice benchmark needs them pinned, and casual sessions should not drift from what the benchmark will measure.
+
+## Corrections, 2026-09-20
+
+- ✅ **The `webfetch` permission caution is STALE.** It was recorded against OpenCode **1.18.19**.
+  Verified on **1.18.25 and 1.18.31** with a control: a `"webfetch": "deny"` block loads fine and
+  `opencode models` exits 0. **The fence can and should deny network escape** — which is what
+  [[fencing-the-shell]] wanted and believed it could not have.
+- ⚠️ **LSP needs its own config or it becomes noise.** With no `pyrightconfig.json`, every Python
+  file reports unresolved imports, and a model observed on 2026-09-20 dismissed a genuine
+  diagnostic as *"a tooling config issue, not a code problem"*. It later wrote the config itself and
+  the diagnostics went clean — but **a noisy verification channel trains a model to ignore that
+  channel.** Ship `{"typeCheckingMode":"basic","extraPaths":[".venv/lib/pythonX.Y/site-packages"]}`.
+- ⛔ **The oracle must live outside the repository.** See [[the-oracle-must-be-hidden]].

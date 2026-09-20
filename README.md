@@ -32,6 +32,9 @@ quantised models (not yet published). Alpharius is the "make it better" half; Co
   npx skills add TopFiend3297401/Alpharius
   ```
 
+  - `opencode-init` — **start here.** The full pre-flight: ground, fence, brief, and a *hidden*
+    oracle. Supersedes `harden-opencode` by adding the oracle-placement rule, an ambition
+    statement, MCP-sourced facts with provenance, and an end-to-end definition of done.
   - `harden-opencode` — ground, fence and verify an OpenCode project for a small model.
   - `brief-small-models` — write task briefs a small model can actually execute.
 - `AGENTS.md`, `opencode.json` — this repo practises what it preaches; agents working here are
