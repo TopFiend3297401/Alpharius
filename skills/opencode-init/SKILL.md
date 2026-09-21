@@ -154,6 +154,10 @@ views, typography.> This is a showcase piece, not a form.
 healthy" while **26 of 30** endpoint pairs returned HTTP 500, because it checked `/health` instead
 of the feature. Do not repeat that.
 
+⛔ **If a command returns the same result twice, stop checking and change the state.** A check that
+says "absent" is telling you to CREATE the thing, not to look again. Verifying a precondition is not
+establishing it.
+
 ⛔ **Before you say you are done, re-read `BRIEF.md` and confirm every numbered step above.** Do not
 ask permission for anything this brief already requires — it is already authorised.
 
@@ -241,6 +245,12 @@ claim about its own speed.
 - ⛔ **Provenance can lie.** A model given a `source` field will happily tag an invented value as
   sourced. State the rule explicitly: no source, mark it estimated.
 - ⚠️ **Noisy LSP trains the model to ignore LSP.** Fix the language-server config before the run.
+- ⛔ **A check that returns the same answer twice is not a plan.** Small models will re-run a
+  failing state check instead of changing the state. **Measured 2026-09-21:** four byte-identical
+  `podman ps` / `podman logs` calls against containers that did not exist, each preceded by the same
+  sentence. ⚠️ **OpenCode's native `doom_loop` did not catch it**, and the exoskeleton's
+  `RepeatDetector` cannot — it guards `find_file`/`read_file`/`edit_file`, and loops happen in
+  `bash`. State the rule in the brief instead.
 - ⛔ **Compaction eats acceptance criteria.** Keep the brief on disk and make re-reading it the last
   step before "done". A model that compacted will otherwise finish against a summary of its contract.
 - ⛔ **A model will ask permission for work it was already given.** State explicitly that the brief

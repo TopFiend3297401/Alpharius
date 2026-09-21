@@ -20,6 +20,17 @@ Projects, status, and next actions. Working note — expect churn. Dates absolut
 
 - Design: [[exoskeleton-mcp-design]]. Implementation: `projects/exoskeleton-mcp/exoskeleton.py` — zero-dependency Python, 28 tests, TDD. Tools: find_file, read_file, edit_file; behaviours: repo jail, repeat detection, state echo.
 - **Scope cut 2026-08-23:** repo jail and repeat detection are already native to OpenCode 1.18.19 (`external_directory`, `doom_loop`) — measured in [[opencode-tool-surface]]. Build the anchored fuzzy edit and the path resolver; drop the other two.
+- ⚠️ **HALF OF THAT SCOPE CUT HAS GONE STALE, 2026-09-21.** The repo-jail half held — `external_directory`
+  caught a real cross-repo read. **The `doom_loop` half did not**: four byte-identical `podman ps` /
+  `podman logs` calls ran unimpeded on OpenCode **1.18.31**, against containers that did not exist.
+  Either the default changed since 1.18.19 or it does not catch this shape. ⛔ **A scope cut justified
+  by "the platform does this natively" needs re-testing whenever the platform version moves.**
+- ⛔ **And restoring `RepeatDetector` would NOT have caught it — a design gap worth naming.** The
+  exoskeleton guards `find_file` / `read_file` / `edit_file`. **Loops happen in `bash`**, because a
+  loop is a repeated *state check*, and state checks are shell calls. An MCP server can only protect
+  the tools it wraps. Options: give the exoskeleton a `run_command` tool and fence `bash` so shell
+  traffic routes through it (real work, real cost), or state the rule in the brief (free, now shipped
+  in `opencode-init`). The prompt-level fix went in first; the architectural one is unbuilt.
 - Next: live smoke test with a real small model driving OpenCode; then modern-era (`_meta`, 2026-07-28) protocol support; then the P4 measurement.
 - New candidate behaviour from [[case-study-the-launcher-build]]: assert that files written this session are reachable from a crate root. Bonsai wrote 517 of 736 lines outside the build graph and no mandated cargo command could see them, because unreferenced files are not targets.
 
