@@ -37,3 +37,11 @@ Or selectively:
 ## Caveat for very small models
 
 Diagnostics add tokens to every turn. For a model with a tight effective context, a noisy language server could crowd out the task — worth measuring, not assuming (open question in [[roadmap]]).
+
+## Correction, 2026-09-22: enabling is not running
+
+Measured on Origin, 2026-09-22, on a Rust task: `"lsp": true` was set, and it did **nothing**. `rust-analyzer` was not installed, OpenCode did not auto-install it, and `opencode.log` showed no language server spawned for the whole session. The run had no diagnostics channel at all while the config said it did.
+
+- **Check the log, not the config.** After the first edit, confirm `opencode.log` records the language server starting. If it does not, the feedback loop this note describes does not exist.
+- The OpenCode docs say some servers auto-install (Pyright for Python). Do not assume that covers your language — install the server yourself (`rustup component add rust-analyzer` for Rust) and re-check the log.
+- A configured-but-inert verification channel is worse than a known-absent one: it is credited with catching breakage it never saw. The same principle as the seventh category in [[failure-taxonomy]] — the claim that a check ran is not evidence that it ran.

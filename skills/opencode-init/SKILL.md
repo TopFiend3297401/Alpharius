@@ -17,6 +17,12 @@ difference between the runs was **entirely** in these files. Same model, same ha
 
 **The lesson in one line: the loop holds the oracle; the model never sees it.**
 
+> **Harness scope.** Steps 1, 3 and 4 are harness-agnostic. Steps 2 and 5 are OpenCode-specific:
+> on DeepSeek Harness, use its bwrap sandbox (`workspace-write`) as the fence — it confines bash
+> structurally — and its native `repeat-tool-reminder` for loops; on Pi, fencing and repeat
+> detection need a `tool_call` extension. Measured comparison:
+> `vault/docs/harnesses-are-a-variable.md` in the Alpharius repository.
+
 ---
 
 ## Which mode
@@ -55,7 +61,7 @@ directory"* or it would have gone hunting for `vault/`.
 
 ---
 
-## Step 2 — `opencode.json` (repo root) · FIXED, copy verbatim
+## Step 2 — `opencode.json` (repo root) · FIXED, copy verbatim · OpenCode-specific
 
 ```json
 {
@@ -108,6 +114,12 @@ required. Everything it had verified was real; it verified against the remembere
 
 **A file survives compaction. A message does not.** Paste it verbatim at the start *and* keep it on
 disk.
+
+⛔ **Paste it — do not only tell the model to read it — and write every "Done means" item as an
+observable output.** Measured 2026-09-22 (one task, one model): "read `BRIEF.md`" scored a mean
+12.5/15; pasting it verbatim 13.2; a condensed paste restating each criterion as something a
+command prints scored 15 (n=1). Not "the binary reports alerts" but "running the binary prints
+`N alert(s):` with N ≥ 1".
 
 ```markdown
 # The brief
@@ -196,7 +208,7 @@ start" because it used `--app-dir src` where the project documented `src.main:ap
 
 ---
 
-## Step 5 — run it
+## Step 5 — run it · OpenCode-specific
 
 ```bash
 cd <repo>
@@ -206,6 +218,17 @@ opencode --model <provider>/<model>
 Then paste `BRIEF.md` verbatim. In a second terminal, watch real throughput — never trust a model's
 claim about its own speed.
 
+⚠️ **Give a thinking model output room.** Measured 2026-09-22: an 8192-token output cap was consumed
+entirely by reasoning (`finish=length`) and `opencode run` exited with no final message. Set the
+output cap to at least 16k, or constrain the reasoning budget. OpenCode sent no `reasoning_effort`
+in the captured requests, so the cap is the lever that works.
+
+⛔ **Grade with the oracle, not the final message.** Every run that failed a criterion in that
+measurement (6 of 6) reported it as passed. The model's account of done is not evidence.
+
+⚠️ **Confirm LSP actually started** in `opencode.log`. `"lsp": true` was inert for Rust with no
+`rust-analyzer` installed, and nothing said so.
+
 ---
 
 ## What is FIXED and what is DYNAMIC
@@ -214,7 +237,10 @@ claim about its own speed.
 
 - The four files exist **before** the first session
 - The boundary lines in `AGENTS.md` (only this repo · no ssh/scp/rsync · named siblings forbidden)
-- The `opencode.json` fence, verbatim, plus `lsp: true`
+- The `opencode.json` fence, verbatim, plus `lsp: true` (OpenCode; the requirement — bash cannot
+  leave the repo — carries to other harnesses)
+- The brief is pasted, and every criterion is an observable output
+- Output cap ≥ 16k for a thinking model
 - **The oracle is outside the repo**
 - Ambition stated in prose, never encoded in the oracle
 - "Done" = stack up · every input · check bodies · read logs · own tests
@@ -255,6 +281,9 @@ claim about its own speed.
   step before "done". A model that compacted will otherwise finish against a summary of its contract.
 - ⛔ **A model will ask permission for work it was already given.** State explicitly that the brief
   is authorisation. Otherwise a compacted session stalls politely at step 1.
+- ⛔ **Self-certified completion.** The model will report a failed criterion as passed, sometimes
+  after diagnosing why it failed. Measured 2026-09-22: 6 of 6 failing runs did so. Only the hidden
+  oracle decides done.
 - ⚠️ **Sibling directories are magnets.** If earlier attempts at the same task sit next door, the
   model will read them unless told not to — measured, and caught by the native repo jail.
 

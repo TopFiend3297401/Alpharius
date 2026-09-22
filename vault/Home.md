@@ -7,13 +7,14 @@ A note is promoted from dev to docs when its claims have been verified and its c
 
 ## Documentation brain
 
-- [[failure-taxonomy]] — the six tool-mechanics failure categories of small coding agents
+- [[failure-taxonomy]] — six tool-mechanics failure categories of small coding agents, plus a seventh — self-certified completion (2026-09-22)
 - [[grounding-with-agents-md]] — pinning referents so the model cannot wander
 - [[fencing-the-shell]] — OpenCode permission config, verified syntax
 - [[lsp-external-verification]] — diagnostics in the loop as a substitute for internal coherence
 - [[case-study-the-vault-hunt]] — a live wander incident, 2026-08-20, and what it teaches
 - [[skills-distribution]] — the skill format, where harnesses load them from, and skills.sh
 - [[opencode-tool-surface]] — measured 2026-08-23: what tools a model is actually offered, the two guardrails that already ship, and the command-template trap
+- [[harnesses-are-a-variable]] — measured 2026-09-22: OpenCode, Pi and DeepSeek Harness on one task; what each sends, where each Alpharius artefact lives in each, brief delivery, and self-certified completion
 
 ## Development brain
 

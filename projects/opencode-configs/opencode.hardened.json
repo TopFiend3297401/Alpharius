@@ -9,6 +9,7 @@
       "rsync *": "deny",
       "find / *": "ask",
       "find /home*": "ask"
-    }
+    },
+    "webfetch": "deny"
   }
 }

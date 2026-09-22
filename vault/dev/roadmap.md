@@ -11,10 +11,12 @@ Projects, status, and next actions. Working note — expect churn. Dates absolut
   measured runs of one task on one local model. Doctrine behind it: [[the-oracle-must-be-hidden]].
   ⚠️ **`harden-opencode` is now the ancestor** and points at it; the two should be reconciled rather
   than left to drift.
-- ⚠️ **P2b (`instructions` + `/ground`) is STILL not in this repo** and is now the measured
-  highest-value layer — it is what made a model route to a knowledge base unprompted instead of
-  inventing facts. Shipping it is the single biggest gap between what runs on Origin and what this
-  repo gives anyone else.
+- ✅ **P2b (`instructions` + `/ground`) SHIPPED to this repo 2026-09-22** — see P2b below. It was
+  the single biggest gap between what ran on Origin and what this repo gave anyone else.
+- 2026-09-22: skills updated with the brief-delivery rule (paste the brief; criteria as observable
+  outputs), the output-cap rule (≥16k for thinking models), self-certified completion, and
+  OpenCode-specific steps marked with their Pi/DSH equivalents. ⚠️ `harden-opencode` and
+  `opencode-init` are still not reconciled.
 
 ## P2 — exoskeleton MCP server (v0.1.0 built 2026-08-20)
 
@@ -45,12 +47,21 @@ Projects, status, and next actions. Working note — expect churn. Dates absolut
 - This is a harness variable for the Coppice benchmark: needs a frontmatter property (e.g. `toolset: stock | assisted`) and a methodology entry there — a deliberate change, never a quiet one.
 - Same design measures the LSP effect (on/off), including the context-crowding caveat in [[lsp-external-verification]].
 
-## P2b — grounding via `instructions` + a `/ground` command (shipped on Origin 2026-08-23, not yet in the repo)
+## P2b — grounding via `instructions` + a `/ground` command (✅ SHIPPED to the repo 2026-09-22)
 
 - OpenCode's `instructions` config key puts a file's contents in the **system prompt of every session**, measured in [[opencode-tool-surface]]. A tool inventory delivered that way needs no invocation and no memory — the cheapest grounding lever found so far.
 - A `/ground` command replaces the built-in `/init`: one fixed `bash` call to a fact-gathering script, then one `write`. The model does no exploration, so an entire class of tool-mechanics failure never gets the chance to happen.
 - ⚠️ The first version used backtick shell injection in the command template, which **silently does not expand** — the model receives literal shell text. See [[opencode-tool-surface]]. Caught by capturing the real request, not by reading the output.
-- Next: generalise both into `projects/opencode-configs/` so they ship, and measure whether the inventory changes hallucinated-tool rates (a P4 variable).
+- ✅ **Shipped 2026-09-22** as templates in `projects/opencode-configs/grounding/` (`tool-inventory.template.md`, `ground-facts.sh`, `command/ground.md`), with installation in that folder's README. The machine-specific estate tool tables were replaced by a marked example section; the inventory's `doom_loop` line was corrected for 1.18.31.
+- Next: measure whether the inventory changes hallucinated-tool rates (a P4 variable). Note the cost side, measured 2026-09-22: with 25 MCP tools plus the inventory, OpenCode's first request was 22.3k tokens against Pi's 2.5k, with no score difference at n=3–4 ([[harnesses-are-a-variable]]).
+
+## P6 — harness-agnostic Alpharius (direction set 2026-09-22)
+
+- ✅ **Three-harness comparison DONE 2026-09-22**: OpenCode 1.18.32, Pi 0.87.0, DeepSeek Harness 0.1.5-rc.3; eleven runs of Occamy-1.0 on one Rust task, hidden 15-check oracle. Write-up: [[harnesses-are-a-variable]]. No harness separated on score (Pi 13.7, OpenCode 13.5, DSH 12.7, n=3–4); brief delivery moved the mean more. New seventh category: self-certified completion ([[failure-taxonomy]]).
+- **Pi extension — in progress** at `projects/pi-extension/`: repeat detection (covering bash) and a fence via the `tool_call` hook; Pi ships neither.
+- **DSH oracle gate — in progress** at `projects/dsh-oracle-gate/`: a plugin gating `/goal` completion on an external oracle, because `update_goal complete` is self-certified (one run quit on round 1 with false claims).
+- **Direction:** state each Alpharius finding as a requirement first (the model sees its tool list; bash cannot leave the workspace; identical calls are interrupted; done is decided by an oracle) and the per-harness mechanism second. The docs brain still reads as an OpenCode manual; convert note by note, not in one rewrite.
+- Open: does the Alpharius tool inventory (always-on in OpenCode) have an equivalent worth building for Pi and DSH, given the request-size cost?
 
 ## P5 — upstream feedback (later)
 

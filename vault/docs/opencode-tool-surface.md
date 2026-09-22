@@ -134,3 +134,11 @@ the harness already provides. The measurement in [[roadmap]] P4 gets more honest
 comparing against stock tools means comparing against stock tools *that already include a jail
 and a loop-breaker*, and an earlier comparison would have credited the exoskeleton with two
 wins the harness was already delivering.
+
+## Corrections, 2026-09-21 and 2026-09-22
+
+- ⚠️ **`doom_loop` did not catch a bash loop on 1.18.31.** Four byte-identical `podman ps` / `podman logs` calls ran unimpeded on 2026-09-21 (recorded in [[roadmap]] P2). Either the default changed after 1.18.19 or it does not catch this shape. "What this changes" above dropped repeat detection from the exoskeleton on the strength of `doom_loop`; that half of the scope cut needs re-testing on every OpenCode version, and loops happen in `bash`, which an MCP server cannot wrap.
+- **Repeat detection is native elsewhere.** DeepSeek Harness 0.1.5-rc.3 ships `repeat-tool-reminder` at harness level, and it covers `bash`. Pi 0.87.0 has no built-in equivalent but exposes a `tool_call` extension hook where one can be written (in progress at `projects/pi-extension/`). See [[harnesses-are-a-variable]].
+- **The jail is harness-specific.** DeepSeek Harness's bwrap sandbox confines `bash` structurally, which `external_directory` does not. See [[fencing-the-shell]].
+- **The request is large.** Measured 2026-09-22: OpenCode's first request with 25 MCP tools and the tool inventory in `instructions` was **22.3k tokens across 37 tools**. Pi's was 2.5k across 4. On the same task and model, the two scored within 0.2 of each other out of 15 (n=3–4), so the extra surface neither helped nor measurably hurt — but it is context a small model does not get back.
+- **OpenCode sent no `reasoning_effort`** in any captured request on 2026-09-22. If a model's reasoning budget matters, set it on the server side or cap output instead.

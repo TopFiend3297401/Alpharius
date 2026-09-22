@@ -31,3 +31,14 @@ Observed state (from the OpenCode log, 2026-08-20): bash permission was wildcard
   the diagnostics went clean — but **a noisy verification channel trains a model to ignore that
   channel.** Ship `{"typeCheckingMode":"basic","extraPaths":[".venv/lib/pythonX.Y/site-packages"]}`.
 - ⛔ **The oracle must live outside the repository.** See [[the-oracle-must-be-hidden]].
+
+## 2026-09-22 — harness comparison and follow-ups
+
+- [x] Three-harness comparison run (OpenCode 1.18.32, Pi 0.87.0, DeepSeek Harness 0.1.5-rc.3). [[harnesses-are-a-variable]].
+- [x] `"webfetch": "deny"` added to `projects/opencode-configs/opencode.hardened.json`; [[fencing-the-shell]] and `harden-opencode` corrected to match the 2026-09-20 finding above.
+- [x] P2b grounding layer copied into `projects/opencode-configs/grounding/` as templates.
+- [ ] **Install `rust-analyzer` on Origin** (`rustup component add rust-analyzer`, or the distro package) — `"lsp": true` was inert for Rust on 2026-09-22 and no language server spawned per `opencode.log`. Then confirm one starts. [[lsp-external-verification]].
+- [ ] **Raise the output cap for thinking models** in the Origin provider config to ≥16k — 8192 was exhausted by reasoning on one run and `opencode run` exited with no final message.
+- [ ] Re-test `doom_loop` on the current OpenCode against a repeated bash call; it did not fire on 1.18.31.
+- [ ] Origin's live `~/.config/opencode/alpharius/tool-inventory.md` still says `doom_loop` stops repeated calls; bring it in line with the shipped template.
+- Pi extension (`projects/pi-extension/`) and DSH oracle gate (`projects/dsh-oracle-gate/`) — in progress.

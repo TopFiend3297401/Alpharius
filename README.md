@@ -22,7 +22,8 @@ quantised models (not yet published). Alpharius is the "make it better" half; Co
   - `vault/dev/` — working notes, designs in flight, roadmap. Volatile.
   - Notes are promoted from dev to docs once verified. Start at `vault/Home.md`.
 - `projects/` — runnable and shippable pieces:
-  - `projects/opencode-configs/` — copy-paste hardened configs for running small models in OpenCode.
+  - `projects/opencode-configs/` — copy-paste hardened configs for running small models in OpenCode,
+    plus the grounding layer: an always-on tool inventory and a `/ground` command.
   - `projects/exoskeleton-mcp/` — an MCP server that compensates for small-model tool-mechanics
     failures (design stage).
 - `skills/` — agent skills in the standard `SKILL.md` format, usable from OpenCode and Claude
@@ -39,6 +40,16 @@ quantised models (not yet published). Alpharius is the "make it better" half; Co
   - `brief-small-models` — write task briefs a small model can actually execute.
 - `AGENTS.md`, `opencode.json` — this repo practises what it preaches; agents working here are
   grounded and fenced by the same mechanisms the docs describe.
+
+## Not only OpenCode
+
+Alpharius began as an OpenCode toolkit. A three-harness comparison on 2026-09-22 (OpenCode, Pi,
+DeepSeek Harness) found that most of what it documents is a harness-agnostic requirement that
+OpenCode happens to meet through config, and that no harness separated on score at that sample
+size — while how the brief was delivered, and whether an external oracle graded the result, did
+matter. See [`vault/docs/harnesses-are-a-variable.md`](vault/docs/harnesses-are-a-variable.md).
+Work in progress on that front: a Pi extension (`projects/pi-extension/`) and an oracle gate for
+DeepSeek Harness's `/goal` (`projects/dsh-oracle-gate/`).
 
 ## Status
 
