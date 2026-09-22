@@ -1,0 +1,12 @@
+# Bundle layer, used when installed with `dsh plugin --profile <name> add ./dsh-oracle-gate`.
+# The row references the package by name. `command` has no sensible default, so the
+# profile's own cordis.patch.yml must override this row by id with the real oracle
+# (a patch replaces the whole `config`, so restate every key you need).
+- insert:
+    - id: goal-oracle-gate
+      name: dsh-goal-oracle-gate
+      config:
+        command: ['false']
+        timeoutMs: 600000
+        maxFeedbackChars: 2000
+        revealOutput: false

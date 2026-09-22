@@ -1,0 +1,13 @@
+# Drop into $DSH_HOME/profiles/<profile>/cordis.patch.yml, or pass with --patch.
+# `name` must be an absolute path to index.js (the loader resolves relative module
+# paths against the profile directory, not against this file).
+# `command` is an argv array run in the session cwd; keep the oracle OUTSIDE the
+# workspace so the model can neither read it nor learn its location.
+- insert:
+    - id: goal-oracle-gate
+      name: /mnt/ORICO-1TB/Code-Projects/projects-personal/Alpharius/projects/dsh-oracle-gate/index.js
+      config:
+        command: ['/path/outside/the/workspace/grade.sh']
+        timeoutMs: 600000
+        maxFeedbackChars: 2000
+        revealOutput: false
