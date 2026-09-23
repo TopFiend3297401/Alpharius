@@ -9,7 +9,7 @@
     "extensions": ["./index.ts"]
   },
   "scripts": {
-    "test": "node --test test/core.test.ts test/fence.test.ts test/hooks.test.ts",
+    "test": "node --test test/core.test.ts test/fence.test.ts test/hooks.test.ts test/bash-timeout.real.test.ts",
     "smoke": "./smoke.sh"
   },
   "engines": {

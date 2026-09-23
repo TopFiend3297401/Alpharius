@@ -230,3 +230,36 @@ describe("against Pi's real read/edit tools", { skip: HAVE_PI ? false : `Pi not 
 		assert.match(r.text, /outside the project root/);
 	});
 });
+
+// Measured 2026-09-23: Pi's bash tool has "no default timeout". Twice a model ran the seeded
+// deadlocking binary without one and the whole run hung until the 45-minute kill. The guard
+// fills in a default when the model gave none; an explicit timeout from the model is kept.
+describe("bash default timeout", () => {
+	test("a bash call with no timeout gets the default (120 s)", () => {
+		const a = createAlpharius(cfg("/tmp"));
+		const e = ev("bash", { command: "./target/debug/beacon beacon.toml sample.log" });
+		assert.equal(a.onToolCall(e), undefined);
+		assert.equal(e.input.timeout, 120);
+	});
+	test("an explicit timeout from the model is kept", () => {
+		const a = createAlpharius(cfg("/tmp"));
+		const e = ev("bash", { command: "cargo test", timeout: 600 });
+		a.onToolCall(e);
+		assert.equal(e.input.timeout, 600);
+	});
+	test("ALPHARIUS_BASH_TIMEOUT sets it; 0 switches it off; ALPHARIUS=0 switches it off", () => {
+		assert.equal(configFromEnv({ ALPHARIUS_BASH_TIMEOUT: "30" }).bashTimeout, 30);
+		assert.equal(configFromEnv({}).bashTimeout, 120);
+		const off = createAlpharius(cfg("/tmp", { bashTimeout: 0 }));
+		const e = ev("bash", { command: "ls" });
+		off.onToolCall(e);
+		assert.equal(e.input.timeout, undefined);
+		assert.equal(configFromEnv({ ALPHARIUS: "0" }).bashTimeout, 0);
+	});
+	test("a blocked bash call is blocked, not given a timeout", () => {
+		const a = createAlpharius(cfg("/tmp"));
+		const e = ev("bash", { command: "ssh jdean@example true" });
+		assert.equal(a.onToolCall(e)?.block, true);
+		assert.equal(e.input.timeout, undefined);
+	});
+});

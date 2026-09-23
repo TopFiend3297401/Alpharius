@@ -14,6 +14,7 @@ model only when a guard fires.
 | **Repo jail**: `path` for read/write/edit (and grep/find/ls if enabled) is resolved through `@`, `~`, `..` and symlinks, including a symlinked parent of a file that does not exist yet | `tool_call` | wander | `ALPHARIUS_JAIL=0` |
 | **Repeat guard**: *"same call three times — change approach or finish"*, bash included | `tool_call` | dead loops | `ALPHARIUS_REPEAT=0` |
 | **Anchored edit rescue**: (a) an anchor Pi can't find that matches exactly one line window with whitespace ignored is rewritten to the file's real text before Pi runs; (b) on Pi's `Could not find…` the result gets the exoskeleton's *nearest actual text* | `tool_call` + `tool_result` | stale edits | `ALPHARIUS_EDIT_RESCUE=0` |
+| **Bash default timeout**: a `bash` call sent without `timeout` gets one (120 s). Pi's bash tool has *no default timeout*; on 2026-09-23 a model twice ran a deadlocking binary bare and the whole run hung until killed. The model's own value is kept | `tool_call` (input patch) | hung runs | `ALPHARIUS_BASH_TIMEOUT=0` (or a number of seconds) |
 | **Phantom path hint**: on a read/edit `ENOENT`, up to 3 fuzzy candidates from the repo (`find_file` scoring) | `tool_result` | phantom paths | `ALPHARIUS_PATH_HINT=0` |
 
 `ALPHARIUS=0` switches everything off. Other settings: `ALPHARIUS_ROOT` (default: the cwd Pi

@@ -25,6 +25,12 @@ export interface AlphariusConfig {
 	repeatWindow: number;
 	/** Absolute paths bash may name even though they are outside the root. */
 	allowPaths: string[];
+	/**
+	 * Seconds applied to a bash call the model sent without `timeout` (Pi's bash tool has
+	 * "no default timeout"). 0 = off. Measured 2026-09-23: twice a model ran a deadlocking
+	 * binary without one and the whole run hung until killed.
+	 */
+	bashTimeout: number;
 }
 
 const off = (v: string | undefined) => v !== undefined && /^(0|off|false|no)$/i.test(v.trim());
@@ -42,6 +48,7 @@ export function configFromEnv(env: NodeJS.ProcessEnv = process.env): AlphariusCo
 		repeatThreshold: Number(env.ALPHARIUS_REPEAT_THRESHOLD) || 3,
 		repeatWindow: Number(env.ALPHARIUS_REPEAT_WINDOW) || 10,
 		allowPaths: [...DEFAULT_ALLOW, ...extra],
+		bashTimeout: all ? 0 : env.ALPHARIUS_BASH_TIMEOUT === undefined ? 120 : Math.max(0, Number(env.ALPHARIUS_BASH_TIMEOUT) || 0),
 	};
 }
 
@@ -158,6 +165,12 @@ export function createAlpharius(config: AlphariusConfig = configFromEnv()) {
 			const full = [reason, repeatMsg].filter(Boolean).join("\n");
 			notify(ctx, `blocked ${event.toolName}: ${full.split("\n")[0]}`);
 			return { block: true, reason: full };
+		}
+
+		// A bash call with no timeout gets the default, so a hanging command (a deadlocked binary,
+		// a server started in the foreground) costs minutes, not the run. The model's own value wins.
+		if (config.bashTimeout > 0 && event.toolName === "bash" && input.timeout === undefined) {
+			input.timeout = config.bashTimeout;
 		}
 
 		// Tier 2 of the anchored edit: an anchor Pi cannot find, but which matches
